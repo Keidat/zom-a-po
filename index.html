@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>좀비 아포칼립스 설문</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      padding: 30px;
+    }
+    h1 {
+      color: #d9534f;
+    }
+    .section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    textarea, input[type="radio"] {
+      margin-top: 5px;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #d9534f;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #user-email-display {
+      font-size: 0.95em;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .info {
+      font-size: 0.85em;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>좀비 아포칼립스 설문</h1>
+
+  <!-- 자동 로그인 처리 -->
+  <div id="g_id_onload"
+       data-client_id="169202845035-6hjdeaf921eblb8sj7l0ur690ju94eug.apps.googleusercontent.com"
+       data-context="signin"
+       data-ux_mode="popup"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="true">
+  </div>
+
+  <!-- 로그인 상태 출력 -->
+  <div id="user-email-display">Google 로그인 후 이메일이 여기에 표시됩니다.</div>
+
+  <form id="zombieForm">
+    <div class="section">
+      <label>1. 이런 일이 일어날 줄은?</label>
+      <input type="radio" name="q1" value="꿈에도 몰랐다" required> 꿈에도 몰랐다<br>
+      <input type="radio" name="q1" value="올게 왔다"> 올게 왔다<br>
+      <input type="radio" name="q1" value="드디어"> 드디어<br>
+      <label>이유:</label>
+      <textarea name="q1_reason" placeholder="선택한 이유를 적어주세요"></textarea>
+    </div>
+
+    <div class="section">
+      <label>2. 좀비를 마주치면?</label>
+      <input type="radio" name="q2" value="도망친다" required> 도망친다<br>
+      <input type="radio" name="q2" value="싸운다"> 싸운다<br>
+      <input type="radio" name="q2" value="숨는다"> 숨는다<br>
+      <input type="radio" name="q2" value="좀비가 된다"> 좀비가 된다<br>
+      <label>이유:</label>
+      <textarea name="q2_reason" placeholder="선택한 이유를 적어주세요"></textarea>
+    </div>
+
+    <button type="submit">제출 및 이메일 전송</button>
+  </form>
+
+  <p class="info">※ 이 설문은 Google 로그인 계정을 통해 이메일을 자동 수집합니다. 이메일은 결과 전송 이외의 용도로 사용되지 않습니다.</p>
+
+  <script>
+    // EmailJS 초기화
+    emailjs.init("bzgYD-n0hnEZGoI2o");
+
+    let userEmail = null;
+
+    // Google 로그인 후 사용자 이메일 가져오기
+    function handleCredentialResponse(response) {
+      const jwt = response.credential;
+      const payload = JSON.parse(atob(jwt.split('.')[1]));
+      userEmail = payload.email;
+      document.getElementById("user-email-display").textContent = "로그인된 이메일: " + userEmail;
+    }
+
+    // 설문 제출 시 EmailJS로 전송
+    document.getElementById('zombieForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (!userEmail) {
+        alert("먼저 Google 계정으로 로그인해주세요.");
+        return;
+      }
+
+      const form = e.target;
+      const data = {
+        q1: form.q1.value,
+        q1_reason: form.q1_reason.value,
+        q2: form.q2.value,
+        q2_reason: form.q2_reason.value,
+        user_email: userEmail
+      };
+
+      emailjs.send("service_a9pxlw2", "template_4bh8fyd", data)
+        .then(() => {
+          alert("응답이 성공적으로 전송되었습니다!");
+          form.reset();
+        }, (err) => {
+          alert("전송 실패: " + JSON.stringify(err));
+        });
+    });
+  </script>
+
+</body>
+</html>

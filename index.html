@@ -131,7 +131,8 @@
         .then(() => {
           alert("응답이 성공적으로 전송되었습니다!");
           form.reset();
-        }, (err) => {
+        }),
+        .catch((err) => {
           alert("전송 실패: " + JSON.stringify(err));
         });
     });

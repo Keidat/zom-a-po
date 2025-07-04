@@ -123,7 +123,6 @@
   <p class="info">※ 이 설문은 Google 로그인 계정을 통해 이메일을 자동 수집합니다. 이메일은 결과 전송 이외의 용도로 사용되지 않습니다.</p>
 
   <script>
-  window.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('zombieForm');
     console.log('폼 엘리먼트:', form);
 
@@ -132,19 +131,14 @@
       e.preventDefault();
 
       console.log('userEmail:', userEmail);
-      const data = { user_email: userEmail };
-      new FormData(form).forEach((v,k) => console.log('필드', k, ':', v));
-
-      console.log('→ emailjs.send 호출 직전');
-      emailjs.send("service_a9pxlw2","template_4bh8fyd", data)
-        .then(res => {
-          console.log('✔ send 성공:', res);
-        })
-        .catch(err => {
-          console.error('✖ send 실패:', err);
-        });
+      const data = {}; 
+        new FormData(form).forEach((v,k) => data[k] = v);
+        data.user_email = userEmail;
+        console.log('→ 전송 페이로드:', data);
+        emailjs.send('service_a9pxlw2','template_4bh8fyd', data)
+          .then(res => console.log('✔ 전송 성공', res))
+          .catch(err => console.error('✖ 전송 실패', err));
     });
-  });
 </script>
 
 </body>

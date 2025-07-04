@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <title>좀비 아포칼립스 설문</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+  <script src="https://cdn.emailjs.com/sdk/latest-es5/email.min.js"></script>
+  <script>
+  // EmailJS 초기화
+  emailjs.init("bzgYD-n0hnEZGoI2o");
+  console.log('EmailJS SDK 버전:', emailjs.VERSION);
+  </script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -96,10 +101,8 @@
   <p class="info">※ 이 설문은 Google 로그인 계정을 통해 이메일을 자동 수집합니다. 이메일은 결과 전송 이외의 용도로 사용되지 않습니다.</p>
 
   <script>
-    // EmailJS 초기화
-    emailjs.init("bzgYD-n0hnEZGoI2o");
 
-    let userEmail = null;
+    let userEmail = almang1119@gmail.com;
 
     // Google 로그인 후 사용자 이메일 가져오기
     function handleCredentialResponse(response) {

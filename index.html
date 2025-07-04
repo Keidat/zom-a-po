@@ -18,7 +18,7 @@
   
     window.onload = () => {
       google.accounts.id.initialize({
-        client_id: "169202845035-6hjdeaf921eblb8sj7l0ur690ju94eug.apps.googleusercontent.com.apps.googleusercontent.com",
+        client_id: "169202845035-6hjdeaf921eblb8sj7l0ur690ju94eug.apps.googleusercontent.com",
         callback: handleCredentialResponse,
   
         // 자동 선택: 이미 동의된 계정이 하나면 별도 입력 없이 자동 로그인
@@ -123,14 +123,6 @@
   <p class="info">※ 이 설문은 Google 로그인 계정을 통해 이메일을 자동 수집합니다. 이메일은 결과 전송 이외의 용도로 사용되지 않습니다.</p>
 
   <script>
-
-    // Google 로그인 후 사용자 이메일 가져오기
-    function handleCredentialResponse(response) {
-      const jwt = response.credential;
-      const payload = JSON.parse(atob(jwt.split('.')[1]));
-      userEmail = payload.email;
-      document.getElementById("user-email-display").textContent = "로그인된 이메일: " + userEmail;
-    }
 
     // 설문 제출 시 EmailJS로 전송
     document.getElementById('zombieForm').addEventListener('submit', e => {

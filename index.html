@@ -4,6 +4,34 @@
   <meta charset="UTF-8">
   <title>좀비 아포칼립스 설문</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    function handleCredentialResponse(response) {
+      console.log("Google 로그인 응답:", response);
+      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+      userEmail = payload.email;
+      document.getElementById("user-email-display")
+              .textContent = "로그인된 이메일: " + userEmail;
+    }
+  
+    window.onload = () => {
+      google.accounts.id.initialize({
+        client_id: "YOUR_CLIENT_ID.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+  
+        // 자동 선택: 이미 동의된 계정이 하나면 별도 입력 없이 자동 로그인
+        auto_select: true,
+  
+        // 팝업 외부 클릭 시 취소하지 않음
+        cancel_on_tap_outside: false,
+  
+        // 원탭 컨텍스트('signin' vs 'use')
+        context: "signin"
+      });
+  
+      // One Tap 또는 자동 팝업 실행
+      google.accounts.id.prompt();
+    };
+  </script>
   <script src="https://cdn.emailjs.com/sdk/latest-es5/email.min.js"></script>
   <script>
   // EmailJS 초기화

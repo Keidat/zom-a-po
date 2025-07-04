@@ -123,36 +123,29 @@
   <p class="info">※ 이 설문은 Google 로그인 계정을 통해 이메일을 자동 수집합니다. 이메일은 결과 전송 이외의 용도로 사용되지 않습니다.</p>
 
   <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('zombieForm');
+    console.log('폼 엘리먼트:', form);
 
-    // 설문 제출 시 EmailJS로 전송
-    document.getElementById('zombieForm').addEventListener('submit', e => {
+    form.addEventListener('submit', e => {
+      console.log('▶ submit 이벤트 발생');
       e.preventDefault();
 
-      if (!userEmail) {
-        alert("먼저 Google 계정으로 로그인해주세요.");
-        return;
-      }
+      console.log('userEmail:', userEmail);
+      const data = { user_email: userEmail };
+      new FormData(form).forEach((v,k) => console.log('필드', k, ':', v));
 
-      const form = e.target;
-      const data = {
-        q1: form.q1.value,
-        q1_reason: form.q1_reason.value,
-        q2: form.q2.value,
-        q2_reason: form.q2_reason.value,
-        user_email: userEmail
-      };
-      new FormData(e.target).forEach((v, k) => data[k] = v);
-
-      emailjs.send("service_a9pxlw2", "template_4bh8fyd", data)
-        .then(() => {
-          alert("응답이 성공적으로 전송되었습니다!");
-          form.reset();
+      console.log('→ emailjs.send 호출 직전');
+      emailjs.send("service_a9pxlw2","template_4bh8fyd", data)
+        .then(res => {
+          console.log('✔ send 성공:', res);
         })
-        .catch((err) => {
-          alert("전송 실패: " + JSON.stringify(err));
+        .catch(err => {
+          console.error('✖ send 실패:', err);
         });
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>

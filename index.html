@@ -5,6 +5,9 @@
   <title>좀비 아포칼립스 설문</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
+    
+    let userEmail = null;
+    
     function handleCredentialResponse(response) {
       console.log("Google 로그인 응답:", response);
       const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -15,7 +18,7 @@
   
     window.onload = () => {
       google.accounts.id.initialize({
-        client_id: "YOUR_CLIENT_ID.apps.googleusercontent.com",
+        client_id: "169202845035-6hjdeaf921eblb8sj7l0ur690ju94eug.apps.googleusercontent.com.apps.googleusercontent.com",
         callback: handleCredentialResponse,
   
         // 자동 선택: 이미 동의된 계정이 하나면 별도 입력 없이 자동 로그인
@@ -91,15 +94,6 @@
 
   <h1>좀비 아포칼립스 설문</h1>
 
-  <!-- 자동 로그인 처리 -->
-  <div id="g_id_onload"
-       data-client_id="169202845035-6hjdeaf921eblb8sj7l0ur690ju94eug.apps.googleusercontent.com"
-       data-context="signin"
-       data-ux_mode="popup"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="true">
-  </div>
-
   <!-- 로그인 상태 출력 -->
   <div id="user-email-display">Google 로그인 후 이메일이 여기에 표시됩니다.</div>
 
@@ -130,8 +124,6 @@
 
   <script>
 
-    let userEmail = null;
-
     // Google 로그인 후 사용자 이메일 가져오기
     function handleCredentialResponse(response) {
       const jwt = response.credential;
@@ -141,7 +133,7 @@
     }
 
     // 설문 제출 시 EmailJS로 전송
-    document.getElementById('zombieForm').addEventListener('submit', function(e) {
+    document.getElementById('zombieForm').addEventListener('submit', e => {
       e.preventDefault();
 
       if (!userEmail) {
@@ -157,12 +149,13 @@
         q2_reason: form.q2_reason.value,
         user_email: userEmail
       };
+      new FormData(e.target).forEach((v, k) => data[k] = v);
 
       emailjs.send("service_a9pxlw2", "template_4bh8fyd", data)
         .then(() => {
           alert("응답이 성공적으로 전송되었습니다!");
           form.reset();
-        }),
+        })
         .catch((err) => {
           alert("전송 실패: " + JSON.stringify(err));
         });
